@@ -1,0 +1,144 @@
+module TestGradient
+    using Base.Test
+    using FiniteDiff
+
+    srand(1)
+
+    f1(x) = sin(x[1]) + cos(x[2])
+    function g1!(out, x)
+        out[1] = cos(x[1])
+        out[2] = -sin(x[2])
+        nothing
+    end
+
+    f2(x) = 2.3 * sin(x[1]) + 3.1 * cos(x[2])
+    function g2!(out, x)
+        out[1] = 2.3 * cos(x[1])
+        out[2] = -3.1 * sin(x[2])
+        nothing
+    end
+
+    f3(x) = 0.1 * (x[1] - 1.0)^2 - 0.3 * (x[2] - 0.7)^2
+    function g3!(out, x)
+        out[1] = 0.1 * 2.0 * (x[1] - 1.0)
+        out[2] = -0.3 * 2.0 * (x[2] - 0.7)
+        nothing
+    end
+
+    function run_tests(n::Integer)
+        funcs = (
+            (f1, g1!),
+            (f2, g2!),
+            (f3, g3!),
+        )
+
+        x = Array(Float64, 2)
+        out = Array(Float64, 2)
+        gr = Array(Float64, 2)
+
+        n_dims = length(x)
+
+        for (f, f′!) in funcs
+            for _ in 1:n
+                for i in 1:n_dims
+                    x[i] = randn()
+                end
+
+                f′!(gr, x)
+
+                FiniteDiff.gradient!(out, f, x, FiniteDiff.Forward)
+                for d in 1:n_dims
+                    @test abs(out[d] - gr[d]) < 10 * FiniteDiff.@forward(x[d])
+                end
+
+                FiniteDiff.gradient!(out, f, x, FiniteDiff.Backward)
+                for d in 1:n_dims
+                    @test abs(out[d] - gr[d]) < 10 * FiniteDiff.@backward(x[d])
+                end
+
+                FiniteDiff.gradient!(out, f, x, FiniteDiff.Central)
+                for d in 1:n_dims
+                    @test(
+                        abs(out[d] - gr[d]) < 10 * FiniteDiff.@central(x[d])^2
+                    )
+                end
+
+                out2 = FiniteDiff.gradient(f, x, FiniteDiff.Forward)
+                for d in 1:n_dims
+                    @test abs(out2[d] - gr[d]) < 10 * FiniteDiff.@forward(x[d])
+                end
+
+                out2 = FiniteDiff.gradient(f, x, FiniteDiff.Backward)
+                for d in 1:n_dims
+                    @test(
+                        abs(out2[d] - gr[d]) < 10 * FiniteDiff.@backward(x[d])
+                    )
+                end
+
+                out2 = FiniteDiff.gradient(f, x, FiniteDiff.Central)
+                for d in 1:n_dims
+                    @test(
+                        abs(out2[d] - gr[d]) < 10 * FiniteDiff.@central(x[d])^2
+                    )
+                end
+
+                FiniteDiff.gradient(f, FiniteDiff.Forward, mutates = true)(
+                    out,
+                    x,
+                )
+                for d in 1:n_dims
+                    @test abs(out[d] - gr[d]) < 10 * FiniteDiff.@forward(x[d])
+                end
+
+                FiniteDiff.gradient(f, FiniteDiff.Backward, mutates = true)(
+                    out,
+                    x,
+                )
+                for d in 1:n_dims
+                    @test abs(out[d] - gr[d]) < 10 * FiniteDiff.@backward(x[d])
+                end
+
+                FiniteDiff.gradient(f, FiniteDiff.Central, mutates = true)(
+                    out,
+                    x,
+                )
+                for d in 1:n_dims
+                    @test abs(out[d] - gr[d]) < 10 * FiniteDiff.@central(x[d])^2
+                end
+
+                out2 = FiniteDiff.gradient(
+                    f,
+                    FiniteDiff.Forward,
+                    mutates = false,
+                )(x)
+                for d in 1:n_dims
+                    @test abs(out2[d] - gr[d]) < 10 * FiniteDiff.@forward(x[d])
+                end
+
+                out2 = FiniteDiff.gradient(
+                    f,
+                    FiniteDiff.Backward,
+                    mutates = false,
+                )(x)
+                for d in 1:n_dims
+                    @test(
+                        abs(out2[d] - gr[d]) < 10 * FiniteDiff.@backward(x[d])
+                    )
+                end
+
+                out2 = FiniteDiff.gradient(
+                    f,
+                    FiniteDiff.Central,
+                    mutates = false,
+                )(x)
+                for d in 1:n_dims
+                    @test(
+                        abs(out2[d] - gr[d]) < 10 * FiniteDiff.@central(x[d])^2
+                    )
+                end
+            end
+        end
+    end
+
+    run_tests(10_000)
+end
