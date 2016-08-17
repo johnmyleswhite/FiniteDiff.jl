@@ -1,16 +1,25 @@
-tests = [
-    "derivative",
-    "gradient",
-    "second_derivative",
-    "hessian",
-]
+using Base.Test
+
+srand(1)
 
 print_with_color(:blue, "Running tests:\n")
 
-srand(345678)
+tests = (
+    "modes.jl",
+    "step_size.jl",
+    "derivative.jl",
+    "second_derivative.jl",
+    "gradient.jl",
+    "hessian.jl",
+)
 
-for t in tests
-    test_fn = "$t.jl"
-    print_with_color(:green, "* $test_fn\n")
-    include(test_fn)
+@testset "All FiniteDiff tests" begin
+    for t in tests
+        try
+            include(t)
+            print_with_color(:green, @sprintf("* %s\n", t))
+        catch
+            print_with_color(:red, @sprintf("* %s\n", t))
+        end
+    end
 end
