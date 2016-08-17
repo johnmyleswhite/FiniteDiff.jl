@@ -34,16 +34,74 @@ performance in many settings.
 
 # Usage Examples
 
-    using FiniteDiff
+First, let's look at the non-mutating API:
 
-    # Compare with cos(0.0)
-    FiniteDiff.derivative(sin, 0.0)
+```jl
+import FiniteDiff
 
-    # Compare with [cos(0.0), -sin(0.0)]
-    FiniteDiff.gradient(x -> sin(x[1]) + cos(x[2]), [0.0, 0.0])
+# Compute approximate derivative and compare it with the true value.
+d = FiniteDiff.derivative(sin, 0.0)
+d, cos(0.0)
 
-    # Compare with -sin(1.0)
-    FiniteDiff.second_derivative(sin, 1.0)
+# Compute approximate second derivative and compare it with the true value.
+d2 = FiniteDiff.second_derivative(sin, 1.0)
+d2, -sin(1.0)
 
-    # Compare with [-sin(1.0) 0.0; 0.0 -cos(1.0)]
-    FiniteDiff.hessian(x -> sin(x[1]) + cos(x[2]), [1.0, 1.0])
+# Compute approximate gradient and compare it with the true value.
+gr = FiniteDiff.gradient(x -> sin(x[1]), [0.0])
+gr, [cos(0.0)]
+
+# Compare approximate Hessian and compare it with the true value.
+H = FiniteDiff.hessian(x -> sin(x[1]) + cos(x[2]), [1.0, 1.0])
+H, [-sin(1.0) 0.0; 0.0 -cos(1.0)]
+```
+
+Now let's look at the parallel mutating API:
+
+```jl
+import FiniteDiff
+
+# Compute approximate derivative and compare it with the true value.
+tmp1 = Array(Float64, 1)
+FiniteDiff.derivative!(tmp1, sin, 0.0)
+tmp1, [cos(0.0)]
+
+# Compute approximate second derivative and compare it with the true value
+tmp2 = Array(Float64, 1)
+FiniteDiff.second_derivative!(tmp2, sin, 1.0)
+tmp2, [-sin(1.0)]
+
+# Compute approximate gradient and compare it with true value
+tmp3 = Array(Float64, 1)
+buffer = Array(Float64, 1)
+FiniteDiff.gradient!(tmp3, x -> sin(x[1]), [0.0], buffer)
+tmp3, [cos(0.0)]
+
+# Compare approximate Hessian and compare it with the true value.
+tmp4 = Array(Float64, 2, 2)
+buffer = Array(Float64, 2)
+FiniteDiff.hessian!(tmp4, x -> sin(x[1]) + cos(x[2]), [1.0, 1.0], buffer)
+tmp4, [-sin(1.0) 0.0; 0.0 -cos(1.0)]
+```
+
+Finally, let's look at the higher-order function API:
+
+```jl
+import FiniteDiff
+
+# Compute approximate derivative and compare it with the true value.
+f′ = FiniteDiff.derivative(sin)
+f′(0.0), cos(0.0)
+
+# Compute approximate second derivative and compare it with the true value.
+f′′ = FiniteDiff.second_derivative(sin)
+f′′(1.0), -sin(1.0)
+
+# Compute approximate gradient and compare it with the true value.
+g = FiniteDiff.gradient(x -> sin(x[1]))
+g([0.0]), [cos(0.0)]
+
+# Compare approximate Hessian and compare it with the true value.
+h = FiniteDiff.hessian(x -> sin(x[1]) + cos(x[2]))
+h([1.0, 1.0]), [-sin(1.0) 0.0; 0.0 -cos(1.0)]
+```

@@ -1,22 +1,27 @@
 module TestDerivative
     using Base.Test
-    using FiniteDiff
+    import FiniteDiff
 
-    srand(1)
-
-    negsin(x) = -sin(x)
-    negcos(x) = -cos(x)
+    negative_sin(x) = -sin(x)
+    negative_cos(x) = -cos(x)
     square(x) = x * x
     double(x) = x + x
     sqrt_deriv(x) = 1 / (2 * sqrt(x))
 
+    function check_error(y_true, y_approximate, err = 1 // 100)
+        # TODO: Decide how to handle very small inputs.
+        if y_true > eps(y_true)
+            @test abs(y_true - y_approximate) / abs(y_true) < err
+        end
+    end
+
     function run_tests(n::Integer)
-        out = Float64[0.0]
+        output = Array(Float64, 1)
 
         funcs = (
             (sin, cos),
-            (cos, negsin),
-            (negsin, negcos),
+            (cos, negative_sin),
+            (negative_sin, negative_cos),
             (square, double),
             (exp, exp),
             (log, inv),
@@ -24,39 +29,41 @@ module TestDerivative
         )
 
         modes = (
-            FiniteDiff.Forward,
-            FiniteDiff.Backward,
-            FiniteDiff.Central,
-            FiniteDiff.Complex,
+            FiniteDiff.ForwardMode(),
+            FiniteDiff.BackwardMode(),
+            FiniteDiff.CentralMode(),
+            FiniteDiff.ComplexMode(),
         )
 
         for (f, f′) in funcs
             for _ in 1:n
-                x = 1.0 + rand()
-
-                expected_errors = (
-                    10 * FiniteDiff.@forward(x),
-                    10 * FiniteDiff.@backward(x),
-                    10 * FiniteDiff.@central(x)^2,
-                    eps(0.0),
-                )
+                x = 1.0 + 100.0 * rand()
 
                 for i in 1:length(modes)
-                    FiniteDiff.derivative!(out, f, x, modes[i])
-                    @test abs(f′(x) - out[1]) < expected_errors[i]
+                    m = modes[i]
 
-                    y = FiniteDiff.derivative(f, x, modes[i])
-                    @test abs(f′(x) - y) < expected_errors[i]
+                    y = FiniteDiff.derivative(f, x, m)
+                    check_error(f′(x), y)
 
-                    FiniteDiff.derivative(f, modes[i], mutates=true)(out, x)
-                    @test abs(f′(x) - out[1]) < expected_errors[i]
+                    FiniteDiff.derivative!(output, f, x, m)
+                    check_error(f′(x), output[1])
 
-                    y = FiniteDiff.derivative(f, modes[i], mutates=false)(x)
-                    @test abs(f′(x) - y) < expected_errors[i]
+                    tmp = FiniteDiff.derivative(f, m, mutates=false)
+                    y = tmp(x)
+                    check_error(f′(x), y)
+
+                    tmp! = FiniteDiff.derivative(f, m, mutates=true)
+                    tmp!(output, x)
+                    check_error(f′(x), output[1])
                 end
+
+                y = FiniteDiff.derivative(f, x)
+                check_error(f′(x), y)
             end
         end
     end
 
-    run_tests(10_000)
+    @testset "derivative tests" begin
+        run_tests(100)
+    end
 end

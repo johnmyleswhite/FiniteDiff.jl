@@ -1,42 +1,51 @@
 module TestSecondDerivative
     using Base.Test
-    using FiniteDiff
+    import FiniteDiff
 
-    srand(1)
-
-    negsin(x) = -sin(x)
-    negcos(x) = -cos(x)
+    negative_sin(x) = -sin(x)
+    negative_cos(x) = -cos(x)
     square(x) = x * x
     two(x) = 2.0
 
+    function check_error(y_true, y_approximate, err = 1 // 100)
+        # TODO: Decide how to handle very small inputs.
+        if y_true > eps(y_true)
+            @test abs(y_true - y_approximate) / abs(y_true) < err
+        end
+    end
+
     function run_tests(n::Integer)
-        out = Float64[0.0]
+        output = Array(Float64, 1)
 
         funcs = (
-            (sin, negsin),
-            (cos, negcos),
+            (sin, negative_sin),
+            (cos, negative_cos),
             (square, two),
             (exp, exp),
         )
 
         for (f, f′′) in funcs
             for _ in 1:n
-                x = 1.0 + rand()
-
-                FiniteDiff.second_derivative!(out, f, x)
-                @test abs(f′′(x) - out[1]) < 10 * FiniteDiff.@hessian(x)^2
+                x = 1.0 + 100.0 * rand()
 
                 y = FiniteDiff.second_derivative(f, x)
-                @test abs(f′′(x) - y) < 10 * FiniteDiff.@hessian(x)^2
+                check_error(f′′(x), y)
 
-                FiniteDiff.second_derivative(f, mutates=true)(out, x)
-                @test abs(f′′(x) - out[1]) < 10 * FiniteDiff.@hessian(x)^2
+                FiniteDiff.second_derivative!(output, f, x)
+                check_error(f′′(x), output[1])
 
-                y = FiniteDiff.second_derivative(f, mutates=false)(x)
-                @test abs(f′′(x) - y) < 10 * FiniteDiff.@hessian(x)^2
+                tmp = FiniteDiff.second_derivative(f, mutates=false)
+                y = tmp(x)
+                check_error(f′′(x), y)
+
+                tmp! = FiniteDiff.second_derivative(f, mutates=true)
+                tmp!(output, x)
+                check_error(f′′(x), output[1])
             end
         end
     end
 
-    run_tests(10_000)
+    @testset "second_derivative tests" begin
+        run_tests(100)
+    end
 end

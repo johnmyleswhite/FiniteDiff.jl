@@ -1,10 +1,10 @@
-isdefined(Base, :__precompile__) && __precompile__(true)
+__precompile__(true)
 
 module FiniteDiff
-    include("eps.jl")
     include("modes.jl")
+    include("step_size.jl")
     include("derivative.jl")
-    include("gradient.jl")
     include("second_derivative.jl")
+    include("gradient.jl")
     include("hessian.jl")
 end

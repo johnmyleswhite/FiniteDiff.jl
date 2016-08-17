@@ -1,82 +1,70 @@
-# Mutating
-function derivative!{T <: AbstractFloat}(
-    output::Vector{T},
+"""
+Evaluate the derivative of `f` at `x` using forward finite-differencing.
+"""
+@inline function derivative(f::Function, x::AbstractFloat, ::ForwardMode)
+    ϵ = step_size(ForwardMode(), x)
+    return (f(x + ϵ) - f(x)) / ϵ
+end
+
+"""
+Evaluate the derivative of `f` at `x` using backward finite-differencing.
+"""
+@inline function derivative(f::Function, x::AbstractFloat, ::BackwardMode)
+    ϵ = step_size(BackwardMode(), x)
+    return (f(x) - f(x - ϵ)) / ϵ
+end
+
+"""
+Evaluate the derivative of `f` at `x` using central finite-differencing.
+"""
+@inline function derivative(f::Function, x::AbstractFloat, ::CentralMode)
+    ϵ = step_size(CentralMode(), x)
+    return (f(x + ϵ) - f(x - ϵ)) / (ϵ + ϵ)
+end
+
+"""
+Evaluate the derivative of `f` at `x` using complex finite-differencing.
+
+NOTE: This will only work if the function `f` both (a) supports complex inputs
+and (b) is analytic in the sense used in complex analysis.
+"""
+@inline function derivative(f::Function, x::AbstractFloat, ::ComplexMode)
+    ϵ = step_size(ComplexMode(), x)
+    return imag(f(x + ϵ * im)) / ϵ
+end
+
+"""
+Evaluate the derivative of `f` at `x` using finite-differencing. Mutates
+`output` to contain the result. See the documentation for the non-mutating
+version for any additional information about the effects of choosing a specific
+finite-differencing mode.
+"""
+function derivative!(
+    output::AbstractArray,
     f::Function,
     x::AbstractFloat,
-    ::Type{Forward},
+    m::Mode = CentralMode(),
 )
-    ϵ = @forward(x)
-    output[1] = (f(x + ϵ) - f(x)) / ϵ
+    output[1] = derivative(f, x, m)
+    return
 end
 
-function derivative!{T <: AbstractFloat}(
-    output::Vector{T},
-    f::Function,
-    x::AbstractFloat,
-    ::Type{Backward},
-)
-    ϵ = @backward(x)
-    output[1] = (f(x) - f(x - ϵ)) / ϵ
-end
+"""
+Evaluate the derivative of `f` at `x`. Defaults to using central
+finite-differencing by calling `derivative(f, x, CentralMode())`.
+"""
+derivative(f::Function, x::AbstractFloat) = derivative(f, x, CentralMode())
 
-function derivative!{T <: AbstractFloat}(
-    output::Vector{T},
-    f::Function,
-    x::AbstractFloat,
-    ::Type{Central},
-)
-    ϵ = @central(x)
-    output[1] = (f(x + ϵ) - f(x - ϵ)) / (ϵ + ϵ)
-end
-
-function derivative!{T <: AbstractFloat}(
-    output::Vector{T},
-    f::Function,
-    x::AbstractFloat,
-    ::Type{Complex},
-)
-    ϵ = @complex(x)
-    output[1] = imag(f(x + ϵ * im)) / ϵ
-end
-
-function derivative!{T <: AbstractFloat}(
-    output::Vector{T},
-    f::Function,
-    x::AbstractFloat,
-)
-    derivative!(output, f, x, Central)
-end
-
-# Non-mutating
-function derivative(f::Function, x::AbstractFloat, ::Type{Forward})
-    ϵ = @forward(x)
-    (f(x + ϵ) - f(x)) / ϵ
-end
-
-function derivative(f::Function, x::AbstractFloat, ::Type{Backward})
-    ϵ = @backward(x)
-    (f(x) - f(x - ϵ)) / ϵ
-end
-
-function derivative(f::Function, x::AbstractFloat, ::Type{Central})
-    ϵ = @central(x)
-    (f(x + ϵ) - f(x - ϵ)) / (ϵ + ϵ)
-end
-
-function derivative(f::Function, x::AbstractFloat, ::Type{Complex})
-    ϵ = @complex(x)
-    imag(f(x + ϵ * im)) / ϵ
-end
-
-derivative(f::Function, x::AbstractFloat) = derivative(f, x, Central)
-
-# Higher-order function
-function derivative(f::Function, mode = Central; mutates::Bool=false)
+"""
+Construct a new function that will evaluate the derivative of `f` at any value
+of `x`. The user can specify the mode as a positional argument and can also
+indicate whether to return a mutating or non-mutating function using a keyword
+argument.
+"""
+function derivative(f::Function, mode = CentralMode(); mutates::Bool=false)
     if mutates
-        f′!(output, x) = derivative!(output, f, x, mode)
-        return f′!
+        return (output, x) -> derivative!(output, f, x, mode)
     else
-        f′(x) = derivative(f, x, mode)
-        return f′
+        return (x, ) -> derivative(f, x, mode)
     end
 end

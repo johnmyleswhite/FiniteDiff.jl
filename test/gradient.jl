@@ -1,28 +1,36 @@
 module TestGradient
     using Base.Test
-    using FiniteDiff
-
-    srand(1)
+    import FiniteDiff
 
     f1(x) = sin(x[1]) + cos(x[2])
     function g1!(out, x)
         out[1] = cos(x[1])
         out[2] = -sin(x[2])
-        nothing
+        return
     end
 
     f2(x) = 2.3 * sin(x[1]) + 3.1 * cos(x[2])
     function g2!(out, x)
         out[1] = 2.3 * cos(x[1])
         out[2] = -3.1 * sin(x[2])
-        nothing
+        return
     end
 
     f3(x) = 0.1 * (x[1] - 1.0)^2 - 0.3 * (x[2] - 0.7)^2
     function g3!(out, x)
         out[1] = 0.1 * 2.0 * (x[1] - 1.0)
         out[2] = -0.3 * 2.0 * (x[2] - 0.7)
-        nothing
+        return
+    end
+
+    function check_error(y_true, y_approximate, err = 1 // 100)
+        n = length(y_true)
+        @test length(y_approximate) == n
+        for i in 1:n
+            if y_true[i] > eps(y_true[i])
+                @test abs(y_true[i] - y_approximate[i]) / abs(y_true[i]) < err
+            end
+        end
     end
 
     function run_tests(n::Integer)
@@ -33,112 +41,47 @@ module TestGradient
         )
 
         x = Array(Float64, 2)
-        out = Array(Float64, 2)
+        output = Array(Float64, 2)
+        buffer = Array(Float64, 2)
         gr = Array(Float64, 2)
 
         n_dims = length(x)
 
+        modes = (
+            FiniteDiff.ForwardMode(),
+            FiniteDiff.BackwardMode(),
+            FiniteDiff.CentralMode(),
+        )
+
         for (f, f′!) in funcs
             for _ in 1:n
                 for i in 1:n_dims
-                    x[i] = randn()
+                    x[i] = 100.0 * randn()
                 end
 
+                # Evaluate the true gradient and store it into gr.
                 f′!(gr, x)
 
-                FiniteDiff.gradient!(out, f, x, FiniteDiff.Forward)
-                for d in 1:n_dims
-                    @test abs(out[d] - gr[d]) < 10 * FiniteDiff.@forward(x[d])
-                end
+                for mode in modes
+                    FiniteDiff.gradient!(output, f, x, buffer, mode)
+                    check_error(gr, output)
 
-                FiniteDiff.gradient!(out, f, x, FiniteDiff.Backward)
-                for d in 1:n_dims
-                    @test abs(out[d] - gr[d]) < 10 * FiniteDiff.@backward(x[d])
-                end
+                    output2 = FiniteDiff.gradient(f, x, mode)
+                    check_error(gr, output2)
 
-                FiniteDiff.gradient!(out, f, x, FiniteDiff.Central)
-                for d in 1:n_dims
-                    @test(
-                        abs(out[d] - gr[d]) < 10 * FiniteDiff.@central(x[d])^2
-                    )
-                end
+                    tmp! = FiniteDiff.gradient(f, mode, mutates = true)
+                    tmp!(output, x, buffer)
+                    check_error(gr, output)
 
-                out2 = FiniteDiff.gradient(f, x, FiniteDiff.Forward)
-                for d in 1:n_dims
-                    @test abs(out2[d] - gr[d]) < 10 * FiniteDiff.@forward(x[d])
-                end
-
-                out2 = FiniteDiff.gradient(f, x, FiniteDiff.Backward)
-                for d in 1:n_dims
-                    @test(
-                        abs(out2[d] - gr[d]) < 10 * FiniteDiff.@backward(x[d])
-                    )
-                end
-
-                out2 = FiniteDiff.gradient(f, x, FiniteDiff.Central)
-                for d in 1:n_dims
-                    @test(
-                        abs(out2[d] - gr[d]) < 10 * FiniteDiff.@central(x[d])^2
-                    )
-                end
-
-                FiniteDiff.gradient(f, FiniteDiff.Forward, mutates = true)(
-                    out,
-                    x,
-                )
-                for d in 1:n_dims
-                    @test abs(out[d] - gr[d]) < 10 * FiniteDiff.@forward(x[d])
-                end
-
-                FiniteDiff.gradient(f, FiniteDiff.Backward, mutates = true)(
-                    out,
-                    x,
-                )
-                for d in 1:n_dims
-                    @test abs(out[d] - gr[d]) < 10 * FiniteDiff.@backward(x[d])
-                end
-
-                FiniteDiff.gradient(f, FiniteDiff.Central, mutates = true)(
-                    out,
-                    x,
-                )
-                for d in 1:n_dims
-                    @test abs(out[d] - gr[d]) < 10 * FiniteDiff.@central(x[d])^2
-                end
-
-                out2 = FiniteDiff.gradient(
-                    f,
-                    FiniteDiff.Forward,
-                    mutates = false,
-                )(x)
-                for d in 1:n_dims
-                    @test abs(out2[d] - gr[d]) < 10 * FiniteDiff.@forward(x[d])
-                end
-
-                out2 = FiniteDiff.gradient(
-                    f,
-                    FiniteDiff.Backward,
-                    mutates = false,
-                )(x)
-                for d in 1:n_dims
-                    @test(
-                        abs(out2[d] - gr[d]) < 10 * FiniteDiff.@backward(x[d])
-                    )
-                end
-
-                out2 = FiniteDiff.gradient(
-                    f,
-                    FiniteDiff.Central,
-                    mutates = false,
-                )(x)
-                for d in 1:n_dims
-                    @test(
-                        abs(out2[d] - gr[d]) < 10 * FiniteDiff.@central(x[d])^2
-                    )
+                    tmp = FiniteDiff.gradient(f, mode, mutates = false)
+                    output2 = tmp(x)
+                    check_error(gr, output2)
                 end
             end
         end
     end
 
-    run_tests(10_000)
+    @testset "gradient tests" begin
+        run_tests(100)
+    end
 end
