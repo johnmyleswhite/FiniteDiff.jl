@@ -1,0 +1,31 @@
+site_name:        FiniteDiff.jl
+repo_url:         https://github.com/johnmyleswhite/FiniteDiff.jl/
+site_description: Library for finite-differencing of Julia functions.
+site_author:      johnmyleswhite
+
+theme: readthedocs
+
+extra:
+  palette:
+    primary: 'indigo'
+    accent:  'blue'
+
+markdown_extensions:
+  - codehilite
+  - extra
+  - tables
+  - fenced_code
+
+extra_javascript:
+  - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML
+  - assets/mathjaxhelper.js
+
+docs_dir: 'build'
+
+pages:
+    - Home: 'index.md'
+    - Core API:
+        - Pure Functions: 'pure_functions.md'
+        - Mutating Functions: 'mutating_functions.md'
+        - Higher Order Functions: 'higher_order_functions.md'
+    - License: 'LICENSE.md'
