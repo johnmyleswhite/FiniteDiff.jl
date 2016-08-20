@@ -1,6 +1,6 @@
 site_name:        FiniteDiff.jl
 repo_url:         https://github.com/johnmyleswhite/FiniteDiff.jl/
-site_description: Library for finite-differencing of Julia functions.
+site_description: Library for numerical differentation of Julia functions.
 site_author:      johnmyleswhite
 
 theme: readthedocs
@@ -24,8 +24,13 @@ docs_dir: 'build'
 
 pages:
     - Home: 'index.md'
-    - Core API:
-        - Pure Functions: 'pure_functions.md'
-        - Mutating Functions: 'mutating_functions.md'
-        - Higher Order Functions: 'higher_order_functions.md'
+    - Core Functions:
+        - derivative: 'core/derivative.md'
+        - second_derivative: 'core/second_derivative.md'
+        - gradient: 'core/gradient.md'
+        - hessian: 'core/hessian.md'
+    - Developer Documentation:
+        - Internal Types and Functions: 'developer/internal_functions.md'
+        - Code Walkthrough: 'developer/code_walkthrough.md'
+    - Bibliography: 'bibliography.md'
     - License: 'LICENSE.md'

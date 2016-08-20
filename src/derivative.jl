@@ -3,7 +3,7 @@ doc"""
 
 # Description
 
-Evaluate the derivative of `f` at `x` using forward finite-differencing. In
+Evaluate the derivative of `f` at `x` using forward finite differences. In
 mathematical notation, we calculate,
 
 ```math
@@ -16,7 +16,8 @@ but not so small as to suffer from extreme numerical inaccuracy.
 # Arguments
 
 * `f::Function`: The function to be differentiated.
-* `x::AbstractFloat`: An `AbstractFloat` value. Its type must implement `eps`.
+* `x::AbstractFloat`: The point at which to evaluate the derivative of `f`. Its
+    type must implement `eps`.
 * `::ForwardMode`: An instance of the `ForwardMode` type.
 
 # Returns
@@ -25,7 +26,7 @@ but not so small as to suffer from extreme numerical inaccuracy.
 
 # Examples
 
-```jl
+```julia
 import FiniteDiff: derivative, ForwardMode
 y = derivative(sin, 0.0, ForwardMode())
 ```
@@ -40,7 +41,7 @@ doc"""
 
 # Description
 
-Evaluate the derivative of `f` at `x` using backward finite-differencing. In
+Evaluate the derivative of `f` at `x` using backward finite differences. In
 mathematical notation, we calculate,
 
 ```math
@@ -53,7 +54,8 @@ but not so small as to suffer from extreme numerical inaccuracy.
 # Arguments
 
 * `f::Function`: The function to be differentiated.
-* `x::AbstractFloat`: An `AbstractFloat` value. Its type must implement `eps`.
+* `x::AbstractFloat`: The point at which to evaluate the derivative of `f`. Its
+    type must implement `eps`.
 * `::BackwardMode`: An instance of the `BackwardMode` type.
 
 # Returns
@@ -62,12 +64,16 @@ but not so small as to suffer from extreme numerical inaccuracy.
 
 # Examples
 
-```jl
+```julia
 import FiniteDiff: derivative, BackwardMode
 y = derivative(sin, 0.0, BackwardMode())
 ```
 """
-@inline function derivative(f::Function, x::AbstractFloat, ::BackwardMode)::Real
+@inline function derivative(
+    f::Function,
+    x::AbstractFloat,
+    ::BackwardMode,
+)::Real
     ϵ = step_size(BackwardMode(), x)
     return (f(x) - f(x - ϵ)) / ϵ
 end
@@ -77,7 +83,7 @@ doc"""
 
 # Description
 
-Evaluate the derivative of `f` at `x` using central finite-differencing. In
+Evaluate the derivative of `f` at `x` using central finite differences. In
 mathematical notation, we calculate,
 
 ```math
@@ -90,7 +96,8 @@ but not so small as to suffer from extreme numerical inaccuracy.
 # Arguments
 
 * `f::Function`: The function to be differentiated.
-* `x::AbstractFloat`: An `AbstractFloat` value. Its type must implement `eps`.
+* `x::AbstractFloat`: The point at which to evaluate the derivative of `f`. Its
+    type must implement `eps`.
 * `::CentralMode`: An instance of the `CentralMode` type.
 
 # Returns
@@ -99,7 +106,7 @@ but not so small as to suffer from extreme numerical inaccuracy.
 
 # Examples
 
-```jl
+```julia
 import FiniteDiff: derivative, CentralMode
 y = derivative(sin, 0.0, CentralMode())
 ```
@@ -114,7 +121,7 @@ doc"""
 
 # Description
 
-Evaluate the derivative of `f` at `x` using complex finite-differencing. In
+Evaluate the derivative of `f` at `x` using complex finite differences. In
 mathematical notation, we calculate,
 
 ```math
@@ -123,7 +130,7 @@ mathematical notation, we calculate,
 
 where ``\epsilon`` is chosen to be as small as possible.
 
-**NOTE**: This mode of finite-differencing will work correctly only when:
+**NOTE**: This mode of finite differences will work correctly only when:
 
 * `f` supports complex inputs.
 * `f` is an analytic function in the complex analysis sense of the word.
@@ -131,7 +138,8 @@ where ``\epsilon`` is chosen to be as small as possible.
 # Arguments
 
 * `f::Function`: The function to be differentiated.
-* `x::AbstractFloat`: An `AbstractFloat` value. Its type must implement `eps`.
+* `x::AbstractFloat`: The point at which to evaluate the derivative of `f`. Its
+    type must implement `eps`.
 * `::ForwardMode`: An instance of the `ForwardMode` type.
 
 # Returns
@@ -140,7 +148,7 @@ where ``\epsilon`` is chosen to be as small as possible.
 
 # Examples
 
-```jl
+```julia
 import FiniteDiff: derivative, ComplexMode
 y = derivative(sin, 0.0, ComplexMode())
 ```
@@ -160,21 +168,22 @@ end
 
 # Description
 
-Evaluate the derivative of `f` at `x` using finite-differencing. The first
+Evaluate the derivative of `f` at `x` using finite differences. The first
 argument `output` will be mutated so that its first element will contain the
 result.
 
 See the documentation for the non-mutating versions of `derivative` for
 additional information about the effects of choosing a specific mode of
-finite-differencing.
+finite differences.
 
 # Arguments
 
 * `output::AbstractArray`: An array whose first element will be mutated.
 * `f::Function`: The function to be differentiated.
-* `x::AbstractFloat`: An `AbstractFloat` value. Its type must implement `eps`.
+* `x::AbstractFloat`: The point at which to evaluate the derivative of `f`. Its
+    type must implement `eps`.
 * `m::Mode`: An instance of the `Mode` type. This will determine the mode
-    of finite-differencing that will be used.
+    of finite differences that will be used.
 
 # Returns
 
@@ -182,7 +191,7 @@ finite-differencing.
 
 # Examples
 
-```jl
+```julia
 import FiniteDiff: derivative, CentralMode
 y = Array(Float64, 1)
 derivative!(y, sin, 0.0, CentralMode())
@@ -203,16 +212,18 @@ end
 
 # Description
 
-Evaluate the derivative of `f` at `x` using finite-differencing without having
-to specify the mode of finite-differencing. Currently defaults to using central
-finite-differencing, which is equivalent to the user calling
-`derivative(f, x, CentralMode())` instead of `derivative(f, x)`. See the
-documentation for `derivative(f, x, CentralMode())` for more details.
+Evaluate the derivative of `f` at `x` using finite differences without
+specifying the mode of finite differences. Defaults to using central
+finite differences, which is equivalent to the user calling
+`derivative(f, x, CentralMode())` instead of `derivative(f, x)`.
+
+See the documentation for `derivative(f, x, CentralMode())` for more details.
 
 # Arguments
 
 * `f::Function`: The function to be differentiated.
-* `x::AbstractFloat`: An `AbstractFloat` value. Its type must implement `eps`.
+* `x::AbstractFloat`: The point at which to evaluate the derivative of `f`. Its
+    type must implement `eps`.
 
 # Returns
 
@@ -220,7 +231,7 @@ documentation for `derivative(f, x, CentralMode())` for more details.
 
 # Examples
 
-```jl
+```julia
 import FiniteDiff: derivative
 y = derivative(sin, 0.0)
 ```
@@ -235,8 +246,8 @@ end
 # Description
 
 Construct a new function that will evaluate the derivative of `f` at any value
-of `x` using finite-differencing. The user can specify the mode of
-finite-differencing to use by providing a second positional argument. The user
+of `x` using finite differences. The user can specify the mode of
+finite differences to use by providing a second positional argument. The user
 can also indicate whether to return a mutating or non-mutating function using
 the keyword argument, `mutates`, which should be either `true` or `false`.
 
@@ -244,7 +255,7 @@ the keyword argument, `mutates`, which should be either `true` or `false`.
 
 * `f::Function`: The function to be differentiated.
 * `m::Mode`: An instance of the `Mode` type. This will determine the mode
-    of finite-differencing that will be used.
+    of finite differences that will be used.
 
 # Keyword Arguments
 
@@ -253,7 +264,7 @@ the keyword argument, `mutates`, which should be either `true` or `false`.
 
 # Examples
 
-```jl
+```julia
 import FiniteDiff: derivative
 f′ = derivative(sin)
 f′(0.0)
