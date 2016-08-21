@@ -6,7 +6,7 @@ reading that article, we suggest reading Section 5.7 in "Numeric Recipes in C",
 which has a full citation below.
 
 In addition, there is interesting material in the SciPy proposal to add support
-for numerical differentiation. The SciPy proposal can be found on
+for numerical differentiation to SciPy. The proposal can be found on
 [GitHub](https://github.com/scipy/scipy/wiki/Proposal:-add-finite-difference-numerical-derivatives-as-scipy.diff).
 
 # Bibliography
