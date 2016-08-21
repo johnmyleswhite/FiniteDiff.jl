@@ -68,9 +68,9 @@ module TestHessian
         n_dims = length(x)
 
         for (f, f′′!) in funcs
-            for _ in 1:n
+            for itr in 1:n
                 for i in 1:n_dims
-                    x[i] = 100.0 * randn()
+                    x[i] = itr
                 end
 
                 f′′!(H, x)
@@ -93,6 +93,6 @@ module TestHessian
     end
 
     @testset "hessian tests" begin
-        run_tests(1)
+        run_tests(100)
     end
 end
