@@ -25,8 +25,8 @@ module TestSecondDerivative
         )
 
         for (f, f′′) in funcs
-            for _ in 1:n
-                x = 1.0 + 100.0 * rand()
+            for itr in 1:n
+                x = 1.0 + itr
 
                 y = FiniteDiff.second_derivative(f, x)
                 check_error(f′′(x), y)

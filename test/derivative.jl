@@ -36,8 +36,8 @@ module TestDerivative
         )
 
         for (f, f′) in funcs
-            for _ in 1:n
-                x = 1.0 + 100.0 * rand()
+            for itr in 1:n
+                x = 1.0 + itr
 
                 for i in 1:length(modes)
                     m = modes[i]

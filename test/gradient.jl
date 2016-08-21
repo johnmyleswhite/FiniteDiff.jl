@@ -56,9 +56,9 @@ module TestGradient
         )
 
         for (f, f′!) in funcs
-            for _ in 1:n
+            for itr in 1:n
                 for i in 1:n_dims
-                    x[i] = 100.0 * randn()
+                    x[i] = itr
                 end
 
                 # Evaluate the true gradient and store it into gr.

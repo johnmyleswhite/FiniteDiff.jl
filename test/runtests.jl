@@ -1,7 +1,5 @@
 using Base.Test
 
-srand(1)
-
 print_with_color(:blue, "Running tests:\n")
 
 tests = (
