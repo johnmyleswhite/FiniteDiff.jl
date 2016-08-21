@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="johnmyleswhite">
+  
+  <title>Internal Types and Functions - FiniteDiff.jl</title>
+  
+
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+  <link href="../../assets/Documenter.css" rel="stylesheet">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Internal Types and Functions";
+    var mkdocs_page_input_path = "developer/internal_functions.md";
+    var mkdocs_page_url = "/developer/internal_functions/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+  <script src="../../js/theme.js"></script> 
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script src="../../assets/mathjaxhelper.js"></script>
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> FiniteDiff.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Core Functions</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../core/derivative/">derivative</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../core/second_derivative/">second_derivative</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../core/gradient/">gradient</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../core/hessian/">hessian</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Developer Documentation</span></li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Internal Types and Functions</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#overview">Overview</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#detailed-method-level-documentation">Detailed Method-Level Documentation</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../code_walkthrough/">Code Walkthrough</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Examples</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../examples/mle/">Maximum Likelihood Estimation</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../bibliography/">Bibliography</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../LICENSE/">License</a>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">FiniteDiff.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Developer Documentation &raquo;</li>
+        
+      
+    
+    <li>Internal Types and Functions</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/johnmyleswhite/FiniteDiff.jl/" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Overview-1'></a></p>
+<h1 id="overview">Overview</h1>
+<p>We use dispatch to determine the mode of finite difference we use to perform numerical differentiation. The modes are specified using the following types:</p>
+<ul>
+<li><code>ForwardMode</code></li>
+<li><code>BackwardMode</code></li>
+<li><code>CentralMode</code></li>
+<li><code>ComplexMode</code></li>
+<li><code>HessianMode</code></li>
+</ul>
+<p>Given a mode and a value of <code>x</code> at which to differentiate <code>f(x)</code>, the following functions are used to determine the step-size to use for finite difference approximations of derivatives:</p>
+<ul>
+<li><code>step_size(::ForwardMode, x::AbstractFloat)</code></li>
+<li><code>step_size(::BackwardMode, x::AbstractFloat)</code></li>
+<li><code>step_size(::CentralMode, x::AbstractFloat)</code></li>
+<li><code>step_size(::ComplexMode, x::AbstractFloat)</code></li>
+<li><code>step_size(::HessianMode, x::AbstractFloat)</code></li>
+</ul>
+<p>Unless there are bugs in the definitions of the core functions, the quality of an approximate derivative is almost entirely determined by these step-sizes. These step sizes are chosen to reach a reasonable compromise between errors introduced by floating-point truncation (which could be minimized by using larger step-sizes) and errors introduced by the use of an truncated Taylor series (which could be minimized by using smaller step-sizes). The exact compromise depends on the mode of finite differences we use.</p>
+<p><a id='Detailed-Method-Level-Documentation-1'></a></p>
+<h1 id="detailed-method-level-documentation">Detailed Method-Level Documentation</h1>
+<p><a id='FiniteDiff.step_size-Tuple{FiniteDiff.ForwardMode,AbstractFloat}' href='#FiniteDiff.step_size-Tuple{FiniteDiff.ForwardMode,AbstractFloat}'>#</a>
+<strong><code>FiniteDiff.step_size</code></strong> &mdash; <em>Method</em>.</p>
+<div class="codehilite"><pre><span></span>step_size(::ForwardMode, x::AbstractFloat)
+</pre></div>
+
+
+<p><strong>Description</strong></p>
+<p>Determine the step-size to use for forward-mode finite differences.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>::ForwardMode</code>: An instance of the <code>ForwardMode</code> type.</li>
+<li><code>x::AbstractFloat</code>: A point at which the derivative of a function will be   approximated. Its type must implement <code>eps</code>.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>ϵ::Real</code>: The step-size to use for finite differences at <code>x</code>.</li>
+</ul>
+<p><strong>References</strong></p>
+<p>See Section 5.7 of Numerical Recipes in C for the mathematical justification for working with <code>sqrt(eps(typeof(x)))</code>.</p>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">ForwardMode</span>
+<span class="n">ϵ</span> <span class="o">=</span> <span class="n">step_size</span><span class="p">(</span><span class="n">ForwardMode</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/johnmyleswhite/FiniteDiff.jl/tree/d9c3da50b0c214b7be008b60cb04d6701548ff92/src/step_size.jl#L1-L29' class='documenter-source'>source</a><br></p>
+<hr />
+<p><a id='FiniteDiff.step_size-Tuple{FiniteDiff.BackwardMode,AbstractFloat}' href='#FiniteDiff.step_size-Tuple{FiniteDiff.BackwardMode,AbstractFloat}'>#</a>
+<strong><code>FiniteDiff.step_size</code></strong> &mdash; <em>Method</em>.</p>
+<div class="codehilite"><pre><span></span>step_size(::BackwardMode, x::AbstractFloat)
+</pre></div>
+
+
+<p><strong>Description</strong></p>
+<p>Determine the step-size to use for backward-mode finite differences.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>::BackwardMode</code>: An instance of the <code>BackwardMode</code> type.</li>
+<li><code>x::AbstractFloat</code>: A point at which the derivative of a function will be   approximated. Its type must implement <code>eps</code>.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>ϵ::Real</code>: The step-size to use for finite differences at <code>x</code>.</li>
+</ul>
+<p><strong>References</strong></p>
+<p>See Section 5.7 of Numerical Recipes in C for the mathematical justification for working with <code>sqrt(eps(typeof(x)))</code>.</p>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">BackwardMode</span>
+<span class="n">ϵ</span> <span class="o">=</span> <span class="n">step_size</span><span class="p">(</span><span class="n">BackwardMode</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/johnmyleswhite/FiniteDiff.jl/tree/d9c3da50b0c214b7be008b60cb04d6701548ff92/src/step_size.jl#L34-L62' class='documenter-source'>source</a><br></p>
+<hr />
+<p><a id='FiniteDiff.step_size-Tuple{FiniteDiff.CentralMode,AbstractFloat}' href='#FiniteDiff.step_size-Tuple{FiniteDiff.CentralMode,AbstractFloat}'>#</a>
+<strong><code>FiniteDiff.step_size</code></strong> &mdash; <em>Method</em>.</p>
+<div class="codehilite"><pre><span></span>step_size(::CentralMode, x::AbstractFloat)
+</pre></div>
+
+
+<p><strong>Description</strong></p>
+<p>Determine the step-size to use for central-mode finite differences.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>::CentralMode</code>: An instance of the <code>CentralMode</code> type.</li>
+<li><code>x::AbstractFloat</code>: A point at which the derivative of a function will be   approximated. Its type must implement <code>eps</code>.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>ϵ::Real</code>: The step-size to use for finite differences at <code>x</code>.</li>
+</ul>
+<p><strong>References</strong></p>
+<p>See Section 5.7 of Numerical Recipes in C for the mathematical justification for working with <code>cbrt(eps(typeof(x)))</code>.</p>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">CentralMode</span>
+<span class="n">ϵ</span> <span class="o">=</span> <span class="n">step_size</span><span class="p">(</span><span class="n">CentralMode</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/johnmyleswhite/FiniteDiff.jl/tree/d9c3da50b0c214b7be008b60cb04d6701548ff92/src/step_size.jl#L67-L95' class='documenter-source'>source</a><br></p>
+<hr />
+<p><a id='FiniteDiff.step_size-Tuple{FiniteDiff.ComplexMode,AbstractFloat}' href='#FiniteDiff.step_size-Tuple{FiniteDiff.ComplexMode,AbstractFloat}'>#</a>
+<strong><code>FiniteDiff.step_size</code></strong> &mdash; <em>Method</em>.</p>
+<div class="codehilite"><pre><span></span>step_size(::ComplexMode, x::AbstractFloat)
+</pre></div>
+
+
+<p><strong>Description</strong></p>
+<p>Determine the step-size to use for complex-mode finite differences.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>::ComplexMode</code>: An instance of the <code>ComplexMode</code> type.</li>
+<li><code>x::AbstractFloat</code>: A point at which the derivative of a function will be   approximated. Its type must implement <code>eps</code>.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>ϵ::Real</code>: The step-size to use for finite differences at <code>x</code>.</li>
+</ul>
+<p><strong>References</strong></p>
+<p>See "The Complex-Step Derivative Approximation" by Martins, Sturdza and Alonso (2003) for the mathematical justification for working with <code>eps(x)</code>.</p>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">ComplexMode</span>
+<span class="n">ϵ</span> <span class="o">=</span> <span class="n">step_size</span><span class="p">(</span><span class="n">ComplexMode</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/johnmyleswhite/FiniteDiff.jl/tree/d9c3da50b0c214b7be008b60cb04d6701548ff92/src/step_size.jl#L100-L128' class='documenter-source'>source</a><br></p>
+<hr />
+<p><a id='FiniteDiff.step_size-Tuple{FiniteDiff.HessianMode,AbstractFloat}' href='#FiniteDiff.step_size-Tuple{FiniteDiff.HessianMode,AbstractFloat}'>#</a>
+<strong><code>FiniteDiff.step_size</code></strong> &mdash; <em>Method</em>.</p>
+<div class="codehilite"><pre><span></span>step_size(::HessianMode, x::AbstractFloat)
+</pre></div>
+
+
+<p><strong>Description</strong></p>
+<p>Determine the step-size to use for finite differences of hessians.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>::HessianMode</code>: An instance of the <code>HessianMode</code> type.</li>
+<li><code>x::AbstractFloat</code>: A point at which the derivative of a function will be   approximated. Its type must implement <code>eps</code>.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>ϵ::Real</code>: The step-size to use for finite differences at <code>x</code>.</li>
+</ul>
+<p><strong>References</strong></p>
+<p>See Section 5.7 of Numerical Recipes in C for the mathematical justification for working with <code>eps(x)^(1 // 4)</code>.</p>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">HessianMode</span>
+<span class="n">ϵ</span> <span class="o">=</span> <span class="n">step_size</span><span class="p">(</span><span class="n">HessianMode</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/johnmyleswhite/FiniteDiff.jl/tree/d9c3da50b0c214b7be008b60cb04d6701548ff92/src/step_size.jl#L133-L161' class='documenter-source'>source</a><br></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../code_walkthrough/" class="btn btn-neutral float-right" title="Code Walkthrough">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../core/hessian/" class="btn btn-neutral" title="hessian"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/johnmyleswhite/FiniteDiff.jl/" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../../core/hessian/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../code_walkthrough/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>

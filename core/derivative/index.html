@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="johnmyleswhite">
+  
+  <title>derivative - FiniteDiff.jl</title>
+  
+
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+  <link href="../../assets/Documenter.css" rel="stylesheet">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "derivative";
+    var mkdocs_page_input_path = "core/derivative.md";
+    var mkdocs_page_url = "/core/derivative/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+  <script src="../../js/theme.js"></script> 
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script src="../../assets/mathjaxhelper.js"></script>
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> FiniteDiff.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Core Functions</span></li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">derivative</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#description">Description</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#primary-methods">Primary Methods</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#detailed-method-level-documentation">Detailed Method-Level Documentation</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../second_derivative/">second_derivative</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../gradient/">gradient</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../hessian/">hessian</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Developer Documentation</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../developer/internal_functions/">Internal Types and Functions</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../developer/code_walkthrough/">Code Walkthrough</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Examples</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../examples/mle/">Maximum Likelihood Estimation</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../bibliography/">Bibliography</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../LICENSE/">License</a>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">FiniteDiff.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Core Functions &raquo;</li>
+        
+      
+    
+    <li>derivative</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/johnmyleswhite/FiniteDiff.jl/" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Description-1'></a></p>
+<h1 id="description">Description</h1>
+<p>The <code>derivative</code> function is used to compute the derivative of a univariate function that maps $\mathbb{R}$ to $\mathbb{R}$. For example, <code>x -&gt; sin(x)</code> is a univariate function that might be passed to the <code>derivative</code> function.</p>
+<p>The <code>derivative</code> function comes in three core variants:</p>
+<ul>
+<li>A pure function that directly computes the derivative of a function <code>f</code> at a   fixed numeric value of <code>x</code> and returns a number as a result.</li>
+<li>A mutating function that computes the derivative of a function <code>f</code> at a fixed   numeric value of <code>x</code> and stores the result into a user-provided output   array. This function returns <code>nothing</code> since its action is focused on   mutation.</li>
+<li>A higher-order function that constructs a new function <code>f_prime</code> that will   compute the derivative of <code>f</code> at any point <code>x</code> that is provided as an   argument to <code>f_prime</code>. This newly constructed function is the return value   for this variant of the <code>derivative</code> function.</li>
+</ul>
+<p>In addition, the <code>derivative</code> function allows one to chose the mode of numerical differentiation that is used to compute an approximate derivative. The default is use central finite differences, which evaluates <code>f</code> at two nearby points and provides much higher accuracy than other strategies at a cost of roughly double the amount of computation. Other modes of numerical differentiation are available, but must be opted-in to explicitly.</p>
+<p><a id='Primary-Methods-1'></a></p>
+<h1 id="primary-methods">Primary Methods</h1>
+<p>The primary methods that most users will want to use are the following:</p>
+<ul>
+<li>Use <code>derivative(f::Function, x::AbstractFloat)</code> to approximate the derivative   of <code>f</code> at <code>x</code>. This is the pure variant described above. Calling this   function is equivalent to calling   <code>derivative(f::Function, x::AbstractFloat, ::CentralMode)</code>, but leaves the   selection of the finite difference mode up to the package author's   discretion.</li>
+<li>Use <code>derivative!(output::AbstractArray, f::Function, x::AbstractFloat)</code> to   approximate the derivative of <code>f</code> at <code>x</code> and store the result into the   <code>output</code> array.</li>
+<li>Use <code>derivative(f::Function)</code> to generate a new function that approximates   the true derivative function of <code>f</code>. The new function <code>f_prime</code> can be   evaluated at any point <code>x</code> that is desired after it is constructed.</li>
+</ul>
+<p><a id='Detailed-Method-Level-Documentation-1'></a></p>
+<h1 id="detailed-method-level-documentation">Detailed Method-Level Documentation</h1>
+<p><a id='FiniteDiff.derivative-Tuple{Function,AbstractFloat}' href='#FiniteDiff.derivative-Tuple{Function,AbstractFloat}'>#</a>
+<strong><code>FiniteDiff.derivative</code></strong> &mdash; <em>Method</em>.</p>
+<div class="codehilite"><pre><span></span>derivative(f::Function, x::AbstractFloat)
+</pre></div>
+
+
+<p><strong>Description</strong></p>
+<p>Evaluate the derivative of <code>f</code> at <code>x</code> using finite differences without specifying the mode of finite differences. Defaults to using central finite differences, which is equivalent to the user calling <code>derivative(f, x, CentralMode())</code> instead of <code>derivative(f, x)</code>.</p>
+<p>See the documentation for <code>derivative(f, x, CentralMode())</code> for more details.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>f::Function</code>: The function to be differentiated.</li>
+<li><code>x::AbstractFloat</code>: The point at which to evaluate the derivative of <code>f</code>. Its   type must implement <code>eps</code>.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>y::Real</code>: The derivative of <code>f</code> evaluated at <code>x</code>.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">derivative</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">derivative</span><span class="p">(</span><span class="n">sin</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/johnmyleswhite/FiniteDiff.jl/tree/d9c3da50b0c214b7be008b60cb04d6701548ff92/src/derivative.jl#L210-L238' class='documenter-source'>source</a><br></p>
+<p><a id='FiniteDiff.derivative!' href='#FiniteDiff.derivative!'>#</a>
+<strong><code>FiniteDiff.derivative!</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>derivative!(
+    output::AbstractArray,
+    f::Function,
+    x::AbstractFloat,
+    m::Mode = CentralMode(),
+)
+</pre></div>
+
+
+<p><strong>Description</strong></p>
+<p>Evaluate the derivative of <code>f</code> at <code>x</code> using finite differences. The first argument <code>output</code> will be mutated so that its first element will contain the result.</p>
+<p>See the documentation for the non-mutating versions of <code>derivative</code> for additional information about the effects of choosing a specific mode of finite differences.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>output::AbstractArray</code>: An array whose first element will be mutated.</li>
+<li><code>f::Function</code>: The function to be differentiated.</li>
+<li><code>x::AbstractFloat</code>: The point at which to evaluate the derivative of <code>f</code>. Its   type must implement <code>eps</code>.</li>
+<li><code>m::Mode</code>: An instance of the <code>Mode</code> type. This will determine the mode   of finite differences that will be used.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>nothing::Void</code>: This function is called for its side effects.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">derivative</span><span class="p">,</span> <span class="n">CentralMode</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Array</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">derivative!</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">CentralMode</span><span class="p">())</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/johnmyleswhite/FiniteDiff.jl/tree/d9c3da50b0c214b7be008b60cb04d6701548ff92/src/derivative.jl#L161-L199' class='documenter-source'>source</a><br></p>
+<p><a id='FiniteDiff.derivative' href='#FiniteDiff.derivative'>#</a>
+<strong><code>FiniteDiff.derivative</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span><span class="nt">derivative</span><span class="o">(</span><span class="nt">f</span><span class="o">:</span><span class="nd">:Function</span><span class="o">,</span> <span class="nt">mode</span><span class="o">:</span><span class="nd">:Mode</span> <span class="o">=</span> <span class="nt">CentralMode</span><span class="o">();</span> <span class="nt">mutates</span><span class="o">:</span><span class="nd">:Bool</span><span class="o">=</span><span class="nt">false</span><span class="o">)</span>
+</pre></div>
+
+
+<p><strong>Description</strong></p>
+<p>Construct a new function that will evaluate the derivative of <code>f</code> at any value of <code>x</code> using finite differences. The user can specify the mode of finite differences to use by providing a second positional argument. The user can also indicate whether to return a mutating or non-mutating function using the keyword argument, <code>mutates</code>, which should be either <code>true</code> or <code>false</code>.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>f::Function</code>: The function to be differentiated.</li>
+<li><code>m::Mode</code>: An instance of the <code>Mode</code> type. This will determine the mode   of finite differences that will be used.</li>
+</ul>
+<p><strong>Keyword Arguments</strong></p>
+<ul>
+<li><code>mutates::Bool = false</code>: Determine whether the resulting function will mutate   its inputs or will be a pure function.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">derivative</span>
+<span class="n">f′</span> <span class="o">=</span> <span class="n">derivative</span><span class="p">(</span><span class="n">sin</span><span class="p">)</span>
+<span class="n">f′</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/johnmyleswhite/FiniteDiff.jl/tree/d9c3da50b0c214b7be008b60cb04d6701548ff92/src/derivative.jl#L243-L272' class='documenter-source'>source</a><br></p>
+<p><a id='FiniteDiff.derivative-Tuple{Function,AbstractFloat,FiniteDiff.ForwardMode}' href='#FiniteDiff.derivative-Tuple{Function,AbstractFloat,FiniteDiff.ForwardMode}'>#</a>
+<strong><code>FiniteDiff.derivative</code></strong> &mdash; <em>Method</em>.</p>
+<div class="codehilite"><pre><span></span>derivative(f::Function, x::AbstractFloat, ::ForwardMode)
+</pre></div>
+
+
+<p><strong>Description</strong></p>
+<p>Evaluate the derivative of <code>f</code> at <code>x</code> using forward finite differences. In mathematical notation, we calculate,</p>
+<p>
+<script type="math/tex; mode=display">
+\frac{f(x + \epsilon) - f(x)}{\epsilon},
+</script>
+</p>
+<p>where $\epsilon$ is chosen to be small enough to approximate the derivative, but not so small as to suffer from extreme numerical inaccuracy.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>f::Function</code>: The function to be differentiated.</li>
+<li><code>x::AbstractFloat</code>: The point at which to evaluate the derivative of <code>f</code>. Its   type must implement <code>eps</code>.</li>
+<li><code>::ForwardMode</code>: An instance of the <code>ForwardMode</code> type.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>y::Real</code>: The derivative of <code>f</code> evaluated at <code>x</code>.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">derivative</span><span class="p">,</span> <span class="n">ForwardMode</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">derivative</span><span class="p">(</span><span class="n">sin</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">ForwardMode</span><span class="p">())</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/johnmyleswhite/FiniteDiff.jl/tree/d9c3da50b0c214b7be008b60cb04d6701548ff92/src/derivative.jl#L1' class='documenter-source'>source</a><br></p>
+<p><a id='FiniteDiff.derivative-Tuple{Function,AbstractFloat,FiniteDiff.BackwardMode}' href='#FiniteDiff.derivative-Tuple{Function,AbstractFloat,FiniteDiff.BackwardMode}'>#</a>
+<strong><code>FiniteDiff.derivative</code></strong> &mdash; <em>Method</em>.</p>
+<div class="codehilite"><pre><span></span>derivative(f::Function, x::AbstractFloat, ::BackwardMode)
+</pre></div>
+
+
+<p><strong>Description</strong></p>
+<p>Evaluate the derivative of <code>f</code> at <code>x</code> using backward finite differences. In mathematical notation, we calculate,</p>
+<p>
+<script type="math/tex; mode=display">
+\frac{f(x) - f(x - \epsilon)}{\epsilon},
+</script>
+</p>
+<p>where $\epsilon$ is chosen to be small enough to approximate the derivative, but not so small as to suffer from extreme numerical inaccuracy.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>f::Function</code>: The function to be differentiated.</li>
+<li><code>x::AbstractFloat</code>: The point at which to evaluate the derivative of <code>f</code>. Its   type must implement <code>eps</code>.</li>
+<li><code>::BackwardMode</code>: An instance of the <code>BackwardMode</code> type.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>y::Real</code>: The derivative of <code>f</code> evaluated at <code>x</code>.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">derivative</span><span class="p">,</span> <span class="n">BackwardMode</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">derivative</span><span class="p">(</span><span class="n">sin</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">BackwardMode</span><span class="p">())</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/johnmyleswhite/FiniteDiff.jl/tree/d9c3da50b0c214b7be008b60cb04d6701548ff92/src/derivative.jl#L39' class='documenter-source'>source</a><br></p>
+<p><a id='FiniteDiff.derivative-Tuple{Function,AbstractFloat,FiniteDiff.CentralMode}' href='#FiniteDiff.derivative-Tuple{Function,AbstractFloat,FiniteDiff.CentralMode}'>#</a>
+<strong><code>FiniteDiff.derivative</code></strong> &mdash; <em>Method</em>.</p>
+<div class="codehilite"><pre><span></span>derivative(f::Function, x::AbstractFloat, ::CentralMode)
+</pre></div>
+
+
+<p><strong>Description</strong></p>
+<p>Evaluate the derivative of <code>f</code> at <code>x</code> using central finite differences. In mathematical notation, we calculate,</p>
+<p>
+<script type="math/tex; mode=display">
+\frac{f(x + \epsilon) - f(x - \epsilon)}{2 \epsilon},
+</script>
+</p>
+<p>where $\epsilon$ is chosen to be small enough to approximate the derivative, but not so small as to suffer from extreme numerical inaccuracy.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>f::Function</code>: The function to be differentiated.</li>
+<li><code>x::AbstractFloat</code>: The point at which to evaluate the derivative of <code>f</code>. Its   type must implement <code>eps</code>.</li>
+<li><code>::CentralMode</code>: An instance of the <code>CentralMode</code> type.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>y::Real</code>: The derivative of <code>f</code> evaluated at <code>x</code>.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">derivative</span><span class="p">,</span> <span class="n">CentralMode</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">derivative</span><span class="p">(</span><span class="n">sin</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">CentralMode</span><span class="p">())</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/johnmyleswhite/FiniteDiff.jl/tree/d9c3da50b0c214b7be008b60cb04d6701548ff92/src/derivative.jl#L81' class='documenter-source'>source</a><br></p>
+<p><a id='FiniteDiff.derivative-Tuple{Function,AbstractFloat,FiniteDiff.ComplexMode}' href='#FiniteDiff.derivative-Tuple{Function,AbstractFloat,FiniteDiff.ComplexMode}'>#</a>
+<strong><code>FiniteDiff.derivative</code></strong> &mdash; <em>Method</em>.</p>
+<div class="codehilite"><pre><span></span>derivative(f::Function, x::AbstractFloat, ::ComplexMode)
+</pre></div>
+
+
+<p><strong>Description</strong></p>
+<p>Evaluate the derivative of <code>f</code> at <code>x</code> using complex finite differences. In mathematical notation, we calculate,</p>
+<p>
+<script type="math/tex; mode=display">
+\frac{\operatorname{Im}(f(x + \epsilon i))}{\epsilon}
+</script>
+</p>
+<p>where $\epsilon$ is chosen to be as small as possible.</p>
+<p><strong>NOTE</strong>: This mode of finite differences will work correctly only when:</p>
+<ul>
+<li><code>f</code> supports complex inputs.</li>
+<li><code>f</code> is an analytic function in the complex analysis sense of the word.</li>
+</ul>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>f::Function</code>: The function to be differentiated.</li>
+<li><code>x::AbstractFloat</code>: The point at which to evaluate the derivative of <code>f</code>. Its   type must implement <code>eps</code>.</li>
+<li><code>::ForwardMode</code>: An instance of the <code>ForwardMode</code> type.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>y::Real</code>: The derivative of <code>f</code> evaluated at <code>x</code>.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">derivative</span><span class="p">,</span> <span class="n">ComplexMode</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">derivative</span><span class="p">(</span><span class="n">sin</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">ComplexMode</span><span class="p">())</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/johnmyleswhite/FiniteDiff.jl/tree/d9c3da50b0c214b7be008b60cb04d6701548ff92/src/derivative.jl#L119' class='documenter-source'>source</a><br></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../second_derivative/" class="btn btn-neutral float-right" title="second_derivative">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../.." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/johnmyleswhite/FiniteDiff.jl/" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../.." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../second_derivative/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>

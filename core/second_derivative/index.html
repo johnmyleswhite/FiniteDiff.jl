@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="johnmyleswhite">
+  
+  <title>second_derivative - FiniteDiff.jl</title>
+  
+
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+  <link href="../../assets/Documenter.css" rel="stylesheet">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "second_derivative";
+    var mkdocs_page_input_path = "core/second_derivative.md";
+    var mkdocs_page_url = "/core/second_derivative/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+  <script src="../../js/theme.js"></script> 
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script src="../../assets/mathjaxhelper.js"></script>
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> FiniteDiff.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Core Functions</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../derivative/">derivative</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">second_derivative</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#description">Description</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#primary-methods">Primary Methods</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#detailed-method-level-documentation">Detailed Method-Level Documentation</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../gradient/">gradient</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../hessian/">hessian</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Developer Documentation</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../developer/internal_functions/">Internal Types and Functions</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../developer/code_walkthrough/">Code Walkthrough</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Examples</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../examples/mle/">Maximum Likelihood Estimation</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../bibliography/">Bibliography</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../LICENSE/">License</a>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">FiniteDiff.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Core Functions &raquo;</li>
+        
+      
+    
+    <li>second_derivative</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/johnmyleswhite/FiniteDiff.jl/" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Description-1'></a></p>
+<h1 id="description">Description</h1>
+<p>The <code>second_derivative</code> function is used to compute the second derivative of a univariate function that maps $\mathbb{R}$ to $\mathbb{R}$. For example, <code>x -&gt; sin(x)</code> is a univariate function that might be passed to the <code>second_derivative</code> function.</p>
+<p>The <code>second_derivative</code> function comes in three core variants:</p>
+<ul>
+<li>A pure function that directly computes the second derivative of a function   <code>f</code> at a fixed numeric value of <code>x</code> and returns a number as a result.</li>
+<li>A mutating function that computes the second derivative of a function <code>f</code> at   a fixed numeric value of <code>x</code> and stores the result into a user-provided   output array. This function returns <code>nothing</code> since its action is focused   on mutation.</li>
+<li>A higher-order function that constructs a new function <code>f_prime2</code> that will   compute the second derivative of <code>f</code> at any point <code>x</code> that is provided as   an argument to <code>f_prime2</code>. This newly constructed function is the return   value for this variant of the <code>second_derivative</code> function.</li>
+</ul>
+<p><a id='Primary-Methods-1'></a></p>
+<h1 id="primary-methods">Primary Methods</h1>
+<p>The primary methods that most users will want to use are the following:</p>
+<ul>
+<li>Use <code>second_derivative(f::Function, x::AbstractFloat)</code> to approximate the   second derivative of <code>f</code> at <code>x</code>. This is the pure variant described above.</li>
+<li>Use <code>second_derivative!(output::AbstractArray, f::Function, x::AbstractFloat)</code>   to approximate the second derivative of <code>f</code> at <code>x</code> and store the result   into the <code>output</code> array.</li>
+<li>Use <code>second_derivative(f::Function)</code> to generate a new function that   approximates the true second derivative function of <code>f</code>. The new function   <code>f_prime2</code> can be evaluated at any point <code>x</code> that is desired after it is   constructed.</li>
+</ul>
+<p><a id='Detailed-Method-Level-Documentation-1'></a></p>
+<h1 id="detailed-method-level-documentation">Detailed Method-Level Documentation</h1>
+<p><a id='FiniteDiff.second_derivative-Tuple{Function,AbstractFloat}' href='#FiniteDiff.second_derivative-Tuple{Function,AbstractFloat}'>#</a>
+<strong><code>FiniteDiff.second_derivative</code></strong> &mdash; <em>Method</em>.</p>
+<div class="codehilite"><pre><span></span>second_derivative(f::Function, x::AbstractFloat)
+</pre></div>
+
+
+<p><strong>Description</strong></p>
+<p>Evaluate the second derivative of <code>f</code> at <code>x</code> using finite differences. In mathematical notation, we calculate,</p>
+<p>
+<script type="math/tex; mode=display">
+\frac{f(x + \epsilon) - 2 f(x) + f(x - \epsilon)}{\epsilon^2},
+</script>
+</p>
+<p>where $\epsilon$ is chosen to be small enough to approximate the second derivative, but not so small as to suffer from extreme numerical inaccuracy.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>f::Function</code>: The function to be differentiated.</li>
+<li><code>x::AbstractFloat</code>: The point at which to evaluate the derivative of <code>f</code>. Its   type must implement <code>eps</code>.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>y::Real</code>: The second derivative of <code>f</code> evaluated at <code>x</code>.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">second_derivative</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">second_derivative</span><span class="p">(</span><span class="n">sin</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/johnmyleswhite/FiniteDiff.jl/tree/d9c3da50b0c214b7be008b60cb04d6701548ff92/src/second_derivative.jl#L1' class='documenter-source'>source</a><br></p>
+<p><a id='FiniteDiff.second_derivative!-Tuple{AbstractArray,Function,AbstractFloat}' href='#FiniteDiff.second_derivative!-Tuple{AbstractArray,Function,AbstractFloat}'>#</a>
+<strong><code>FiniteDiff.second_derivative!</code></strong> &mdash; <em>Method</em>.</p>
+<div class="codehilite"><pre><span></span>second_derivative!(
+    output::AbstractArray,
+    f::Function,
+    x::AbstractFloat,
+)
+</pre></div>
+
+
+<p><strong>Description</strong></p>
+<p>Evaluate the second derivative of <code>f</code> at <code>x</code> using finite differences. In mathematical notation, we calculate,</p>
+<p>
+<script type="math/tex; mode=display">
+\frac{f(x + \epsilon) - 2 f(x) + f(x - \epsilon)}{\epsilon^2},
+</script>
+</p>
+<p>where $\epsilon$ is chosen to be small enough to approximate the second derivative, but not so small as to suffer from extreme numerical inaccuracy.</p>
+<p>The first argument, <code>output</code>, will be mutated so that the value of the second derivative is its first element.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>output::AbstractArray</code>: An array whose first element will be mutated.</li>
+<li><code>f::Function</code>: The function to be differentiated.</li>
+<li><code>x::AbstractFloat</code>: The point at which to evaluate the derivative of <code>f</code>. Its   type must implement <code>eps</code>.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>void::Nothing</code>: This function is called for its side-effects.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">second_derivative</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Array</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">second_derivative!</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/johnmyleswhite/FiniteDiff.jl/tree/d9c3da50b0c214b7be008b60cb04d6701548ff92/src/second_derivative.jl#L38' class='documenter-source'>source</a><br></p>
+<p><a id='FiniteDiff.second_derivative-Tuple{Function}' href='#FiniteDiff.second_derivative-Tuple{Function}'>#</a>
+<strong><code>FiniteDiff.second_derivative</code></strong> &mdash; <em>Method</em>.</p>
+<div class="codehilite"><pre><span></span><span class="nt">second_derivative</span><span class="o">(</span><span class="nt">f</span><span class="o">:</span><span class="nd">:Function</span><span class="o">;</span> <span class="nt">mutates</span><span class="o">:</span><span class="nd">:Bool</span><span class="o">=</span><span class="nt">false</span><span class="o">)</span>
+</pre></div>
+
+
+<p><strong>Description</strong></p>
+<p>Construct a new function that will evaluate the second derivative of <code>f</code> at any point <code>x</code>. A keyword argument specifies whether the resulting function should be mutating or non-mutating.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>f::Function</code>: The function to be differentiated.</li>
+</ul>
+<p><strong>Keyword Arguments</strong></p>
+<ul>
+<li><code>mutates::Bool = false</code>: Determine whether the resulting function will mutate   its inputs or will be a pure function.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>void::Nothing</code>: This function is called for its side-effects.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">second_derivative</span>
+<span class="n">f′′</span> <span class="o">=</span> <span class="n">second_derivative</span><span class="p">(</span><span class="n">sin</span><span class="p">)</span>
+<span class="n">f′′</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/johnmyleswhite/FiniteDiff.jl/tree/d9c3da50b0c214b7be008b60cb04d6701548ff92/src/second_derivative.jl#L88-L117' class='documenter-source'>source</a><br></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../gradient/" class="btn btn-neutral float-right" title="gradient">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../derivative/" class="btn btn-neutral" title="derivative"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/johnmyleswhite/FiniteDiff.jl/" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../derivative/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../gradient/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>

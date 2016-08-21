@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Library for numerical differentation of Julia functions.">
+  <meta name="author" content="johnmyleswhite">
+  
+  <title>FiniteDiff.jl</title>
+  
+
+  <link rel="shortcut icon" href="./img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="./css/highlight.css">
+  <link href="./assets/Documenter.css" rel="stylesheet">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "None";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = "/";
+  </script>
+  
+  <script src="./js/jquery-2.1.1.min.js"></script>
+  <script src="./js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="./js/highlight.pack.js"></script>
+  <script src="./js/theme.js"></script> 
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script src="./assets/mathjaxhelper.js"></script>
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> FiniteDiff.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href=".">Home</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#introduction">Introduction</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#basic-examples">Basic Examples</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Core Functions</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="core/derivative/">derivative</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="core/second_derivative/">second_derivative</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="core/gradient/">gradient</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="core/hessian/">hessian</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Developer Documentation</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="developer/internal_functions/">Internal Types and Functions</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="developer/code_walkthrough/">Code Walkthrough</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Examples</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="examples/mle/">Maximum Likelihood Estimation</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="bibliography/">Bibliography</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="LICENSE/">License</a>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">FiniteDiff.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/johnmyleswhite/FiniteDiff.jl/" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Introduction-1'></a></p>
+<h1 id="introduction">Introduction</h1>
+<p>The FiniteDiff.jl package provides functions for computing approximate first and second derivatives of univariate and multivariate functions. It uses numerical differentiation to generate these approximations, which means that it is possible to compute an approximate derivative for any Julia function – even functions that are not differentiable and are therefore not safe to differentiate.</p>
+<p>Despite being universally applicable, the quality of the approximated derivatives computed by this package varies substantially across different functions. Even for a fixed function, the quality of the approximations provided by numerical differentiation varies substantially across different points in the function's domain. If your function is amenable to other techniques (such as forward-mode automatic differentiation), you will almost certainly get better results from those techniques. Use this package only when you need approximate derivatives and no other technique will work.</p>
+<p>An example of a setting in which you would need to use numerical differentiation involves a Julia function that calls out to a C function to compute a mathematical function along the way. This might happen if you were to use a C implementation to compute the integral of the incomplete beta function as part of a statistical calculation. Because the C function is not written in pure Julia, automatic differentiation techniques would not work on the Julia code as a whole. In that kind of setting, numerical differentiation would be the only effective way to automatically determine the Julia function's derivatives.</p>
+<p>This package is intended to be a replacement for the numerical differentiation functionality found in the Calculus package. It attempts to unify the API for numerical differentiation with the API for automatic differentiation found in the <a href="http://www.juliadiff.org/ForwardDiff.jl/index.html">ForwardDiff.jl package</a>.</p>
+<p><a id='Basic-Examples-1'></a></p>
+<h1 id="basic-examples">Basic Examples</h1>
+<p>The examples below are intended to provide a basic sense of how the package can be used. Further documentation is found in others sections.</p>
+<div class="codehilite"><pre><span></span><span class="n">julia</span><span class="o">&gt;</span> <span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">derivative</span><span class="p">,</span> <span class="n">second_derivative</span><span class="p">,</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">hessian</span>
+
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">y′</span> <span class="o">=</span> <span class="n">derivative</span><span class="p">(</span><span class="n">sin</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="mf">0.5403023058631036</span>
+
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">y′′</span> <span class="o">=</span> <span class="n">second_derivative</span><span class="p">(</span><span class="n">sin</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="o">-</span><span class="mf">0.8414709866046906</span>
+
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">gr</span> <span class="o">=</span> <span class="n">gradient</span><span class="p">(</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<span class="mi">2</span><span class="o">-</span><span class="n">element</span> <span class="n">Array</span><span class="p">{</span><span class="kt">Float64</span><span class="p">,</span><span class="mi">1</span><span class="p">}:</span>
+ <span class="o">-</span><span class="mf">2.0</span>
+ <span class="o">-</span><span class="mf">4.0</span>
+
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">H</span> <span class="o">=</span> <span class="n">hessian</span><span class="p">(</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<span class="mi">2</span><span class="n">×2</span> <span class="n">Array</span><span class="p">{</span><span class="kt">Float64</span><span class="p">,</span><span class="mi">2</span><span class="p">}:</span>
+ <span class="mf">2.0</span>         <span class="mf">6.05545e-6</span>
+ <span class="mf">6.05545e-6</span>  <span class="mf">2.0</span>
+</pre></div>
+
+
+<p>The four functions shown above define the core API for the FiniteDiff package. Each of the functions has a section dedicated to it; that function's section provides a full overview of the function's use.</p>
+<p>Before you read the detailed documentation, we encourage you to consider using mutating variants of the <code>gradient</code> and <code>hessian</code> functions to avoid allocating memory unnecessarily when working with multivariate functions. The examples below show how these mutating variants work:</p>
+<div class="codehilite"><pre><span></span><span class="n">julia</span><span class="o">&gt;</span> <span class="k">import</span> <span class="n">FiniteDiff</span><span class="p">:</span> <span class="n">gradient!</span><span class="p">,</span> <span class="n">hessian!</span>
+
+<span class="c"># Allocate memory once that can be reused in the future.</span>
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">gr</span> <span class="o">=</span> <span class="n">Array</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="mi">2</span><span class="o">-</span><span class="n">element</span> <span class="n">Array</span><span class="p">{</span><span class="kt">Float64</span><span class="p">,</span><span class="mi">1</span><span class="p">}:</span>
+ <span class="mf">1.4822e-323</span>
+ <span class="mf">4.44659e-323</span>
+
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">H</span> <span class="o">=</span> <span class="n">Array</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="mi">2</span><span class="n">×2</span> <span class="n">Array</span><span class="p">{</span><span class="kt">Float64</span><span class="p">,</span><span class="mi">2</span><span class="p">}:</span>
+ <span class="mf">1.50626e165</span>  <span class="mf">6.97302e252</span>
+ <span class="mf">6.46167e174</span>  <span class="mf">8.40996e-315</span>
+
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">buffer</span> <span class="o">=</span> <span class="n">Array</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="mi">2</span><span class="o">-</span><span class="n">element</span> <span class="n">Array</span><span class="p">{</span><span class="kt">Float64</span><span class="p">,</span><span class="mi">1</span><span class="p">}:</span>
+ <span class="mf">2.27838e-314</span>
+ <span class="mf">2.25293e-314</span>
+
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="mi">2</span><span class="o">-</span><span class="n">element</span> <span class="n">Array</span><span class="p">{</span><span class="kt">Float64</span><span class="p">,</span><span class="mi">1</span><span class="p">}:</span>
+ <span class="mf">0.0</span>
+ <span class="mf">0.0</span>
+
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">gradient!</span><span class="p">(</span><span class="n">gr</span><span class="p">,</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
+
+<span class="c"># The gradient is now stored in gr.</span>
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">gr</span>
+<span class="mi">2</span><span class="o">-</span><span class="n">element</span> <span class="n">Array</span><span class="p">{</span><span class="kt">Float64</span><span class="p">,</span><span class="mi">1</span><span class="p">}:</span>
+ <span class="o">-</span><span class="mf">2.0</span>
+ <span class="o">-</span><span class="mf">4.0</span>
+
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">hessian!</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
+
+<span class="c"># The Hessian is now stored in H.</span>
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">H</span>
+<span class="mi">2</span><span class="n">×2</span> <span class="n">Array</span><span class="p">{</span><span class="kt">Float64</span><span class="p">,</span><span class="mi">2</span><span class="p">}:</span>
+ <span class="mf">2.0</span>         <span class="mf">6.05545e-6</span>
+ <span class="mf">6.05545e-6</span>  <span class="mf">2.0</span>
+</pre></div>
+
+
+<p>Note that these functions require an additional buffer of memory to operate on. This buffer will be mutated, but its output at the end of the function's execution is essentially meaningless. It is just a scratchpad used to speed up the computation of the numerical approximations.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="core/derivative/" class="btn btn-neutral float-right" title="derivative">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/johnmyleswhite/FiniteDiff.jl/" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+      
+        <span style="margin-left: 15px"><a href="core/derivative/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 0.15.3
+Build Date UTC : 2016-08-21 19:39:14.515939
+-->
