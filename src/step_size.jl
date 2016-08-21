@@ -3,32 +3,32 @@
 
 # Description
 
-Determine the step-size to use for forward-mode finite-differencing of
-gradients.
+Determine the step-size to use for forward-mode finite differences.
 
 # Arguments
 
 * `::ForwardMode`: An instance of the `ForwardMode` type.
-* `x::AbstractFloat`: An `AbstractFloat` value. Its type must implement `eps`.
+* `x::AbstractFloat`: A point at which the derivative of a function will be
+    approximated. Its type must implement `eps`.
 
 # Returns
 
-* `ϵ::Real`: The step-size to use for finite-differencing at `x`.
+* `ϵ::Real`: The step-size to use for finite differences at `x`.
 
 # References
 
 See Section 5.7 of Numerical Recipes in C for the mathematical justification
-for working with `sqrt(eps(x))`.
+for working with `sqrt(eps(typeof(x)))`.
 
 # Examples
 
-```jl
+```julia
 import FiniteDiff: step_size, ForwardMode
 ϵ = step_size(ForwardMode(), 0.0)
 ```
 """
 @inline function step_size(::ForwardMode, x::AbstractFloat)::Real
-    return sqrt(eps(x)) * max(one(x), abs(x))
+    return sqrt(eps(typeof(x))) * max(one(typeof(x)), abs(x))
 end
 
 """
@@ -36,32 +36,32 @@ end
 
 # Description
 
-Determine the step-size to use for backward-mode finite-differencing of
-gradients.
+Determine the step-size to use for backward-mode finite differences.
 
 # Arguments
 
 * `::BackwardMode`: An instance of the `BackwardMode` type.
-* `x::AbstractFloat`: An `AbstractFloat` value. Its type must implement `eps`.
+* `x::AbstractFloat`: A point at which the derivative of a function will be
+    approximated. Its type must implement `eps`.
 
 # Returns
 
-* `ϵ::Real`: The step-size to use for finite-differencing at `x`.
+* `ϵ::Real`: The step-size to use for finite differences at `x`.
 
 # References
 
 See Section 5.7 of Numerical Recipes in C for the mathematical justification
-for working with `sqrt(eps(x))`.
+for working with `sqrt(eps(typeof(x)))`.
 
 # Examples
 
-```jl
+```julia
 import FiniteDiff: step_size, BackwardMode
 ϵ = step_size(BackwardMode(), 0.0)
 ```
 """
 @inline function step_size(::BackwardMode, x::AbstractFloat)::Real
-    return sqrt(eps(x)) * max(one(x), abs(x))
+    return sqrt(eps(typeof(x))) * max(one(typeof(x)), abs(x))
 end
 
 """
@@ -69,32 +69,32 @@ end
 
 # Description
 
-Determine the step-size to use for central-mode finite-differencing of
-gradients.
+Determine the step-size to use for central-mode finite differences.
 
 # Arguments
 
 * `::CentralMode`: An instance of the `CentralMode` type.
-* `x::AbstractFloat`: An `AbstractFloat` value. Its type must implement `eps`.
+* `x::AbstractFloat`: A point at which the derivative of a function will be
+    approximated. Its type must implement `eps`.
 
 # Returns
 
-* `ϵ::Real`: The step-size to use for finite-differencing at `x`.
+* `ϵ::Real`: The step-size to use for finite differences at `x`.
 
 # References
 
 See Section 5.7 of Numerical Recipes in C for the mathematical justification
-for working with `cbrt(eps(x))`.
+for working with `cbrt(eps(typeof(x)))`.
 
 # Examples
 
-```jl
+```julia
 import FiniteDiff: step_size, CentralMode
 ϵ = step_size(CentralMode(), 0.0)
 ```
 """
 @inline function step_size(::CentralMode, x::AbstractFloat)::Real
-    return cbrt(eps(x)) * max(one(x), abs(x))
+    return cbrt(eps(typeof(x))) * max(one(typeof(x)), abs(x))
 end
 
 """
@@ -102,17 +102,17 @@ end
 
 # Description
 
-Determine the step-size to use for complex-mode finite-differencing of
-gradients.
+Determine the step-size to use for complex-mode finite differences.
 
 # Arguments
 
 * `::ComplexMode`: An instance of the `ComplexMode` type.
-* `x::AbstractFloat`: An `AbstractFloat` value. Its type must implement `eps`.
+* `x::AbstractFloat`: A point at which the derivative of a function will be
+    approximated. Its type must implement `eps`.
 
 # Returns
 
-* `ϵ::Real`: The step-size to use for finite-differencing at `x`.
+* `ϵ::Real`: The step-size to use for finite differences at `x`.
 
 # References
 
@@ -121,13 +121,13 @@ See "The Complex-Step Derivative Approximation" by Martins, Sturdza and Alonso
 
 # Examples
 
-```jl
+```julia
 import FiniteDiff: step_size, ComplexMode
 ϵ = step_size(ComplexMode(), 0.0)
 ```
 """
 @inline function step_size(::ComplexMode, x::AbstractFloat)::Real
-    return eps(x)
+    return eps(typeof(x))
 end
 
 """
@@ -135,16 +135,17 @@ end
 
 # Description
 
-Determine the step-size to use for finite-differencing of hessians.
+Determine the step-size to use for finite differences of hessians.
 
 # Arguments
 
 * `::HessianMode`: An instance of the `HessianMode` type.
-* `x::AbstractFloat`: An `AbstractFloat` value. Its type must implement `eps`.
+* `x::AbstractFloat`: A point at which the derivative of a function will be
+    approximated. Its type must implement `eps`.
 
 # Returns
 
-* `ϵ::Real`: The step-size to use for finite-differencing at `x`.
+* `ϵ::Real`: The step-size to use for finite differences at `x`.
 
 # References
 
@@ -153,11 +154,11 @@ for working with `eps(x)^(1 // 4)`.
 
 # Examples
 
-```jl
+```julia
 import FiniteDiff: step_size, HessianMode
 ϵ = step_size(HessianMode(), 0.0)
 ```
 """
 @inline function step_size(::HessianMode, x::AbstractFloat)::Real
-    return eps(x)^(1 // 4) * max(one(x), abs(x))
+    return eps(typeof(x))^(1 // 4) * max(one(typeof(x)), abs(x))
 end

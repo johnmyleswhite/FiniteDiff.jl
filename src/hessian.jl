@@ -1,26 +1,28 @@
 """
-    hessian!{S <: AbstractFloat, T <: AbstractFloat}(
-        output::Matrix{T},
+    hessian!{T <: AbstractFloat}(
+        output::AbstractArray,
         f::Function,
-        x::Vector{S},
-        buffer::Vector{S},
+        x::AbstractArray{T},
+        buffer::AbstractArray{T},
     )
 
 # Description
 
-Evaluate the Hessian of `f` at `x` using finite-differencing.
-Store the results into `output`. Work with a user-provided `buffer` to ensure
-that we can work without copies, but also without mutating `x`. In Rust jargon,
-we take ownership of both `output` and `buffer`, but do not require ownership
-of `x`. We just need read-only access to `x`.
+Evaluate the Hessian of `f` at `x` using finite differences. Store the results
+into `output`. Work with a user-provided `buffer` to ensure that we can work
+without copies, but also without mutating `x`. In Rust jargon, we take
+ownership of both `output` and `buffer`, but do not require ownership of `x`.
+We just need read-only access to `x`.
 
 # Arguments
 
-* `output::Vector{S}`: An array that will be mutated to contain the gradient.
+* `output::AbstractArray`: An array that will be mutated to contain the
+    gradient.
 * `f::Function`: The function to be differentiated.
-* `x::Vector{T}`: The value of `x` at which to evaluate the Hessian of `f`.
-* `buffer::Vector{T}`: A buffer that is equivalent to `similar(x)`. Used for
-    temporary mutation.
+* `x::AbstractArray{T}`: The value of `x` at which to evaluate the Hessian of
+    `f`.
+* `buffer::AbstractArray{T}`: A buffer that is equivalent to `similar(x)`. Used
+    as a temporary copy of `x` that can be mutated.
 
 # Returns
 
@@ -28,20 +30,19 @@ of `x`. We just need read-only access to `x`.
 
 # Examples
 
-```jl
+```julia
 import FiniteDiff: hessian!
 x = [0.0, 0.0]
-output = Array(Float64, 2, 2)
-buffer = Array(Float64, 2)
+output, buffer = similar(x, 2, 2), similar(x, 2)
 hessian!(output, x -> sin(x[1]) + 2 * sin(x[2]), x, buffer)
 ```
 """
-function hessian!{S <: AbstractFloat, T <: AbstractFloat}(
-    output::Matrix{T},
+function hessian!{T <: AbstractFloat}(
+    output::AbstractArray,
     f::Function,
-    x::Vector{S},
-    buffer::Vector{S},
-)
+    x::AbstractArray{T},
+    buffer::AbstractArray{T},
+)::Void
     # Validate that all inputs have the expected number of dimensions.
     n = length(x)
     if size(output) != (n, n) || length(buffer) != n
@@ -54,46 +55,62 @@ function hessian!{S <: AbstractFloat, T <: AbstractFloat}(
     # Copy x into the user-supplied buffer.
     copy!(buffer, x)
 
-    # Iterate over the dimensions of the input.
+    # Iterate over the rows of the input.
     for i = 1:n
-        # TODO: Improve comments for this loop and the nested loop inside it.
+        # Make a copy of the true value of x[i].
         x_i = x[i]
 
+        # Temporarily change buffer[i] to a new value and evaluate f at the
+        # new x stored in the buffer.
         ϵ = step_size(HessianMode(), x_i)
-
         buffer[i] = x_i + ϵ
         f_xpp = f(buffer)
 
+        # Temporarily change buffer[i] to a new value and evaluate f at the
+        # new x stored in the buffer.
         buffer[i] = x_i - ϵ
         f_xmm = f(buffer)
 
+        # Store the diagonal component of the Hessian into the output array.
         output[i, i] = (f_xpp - 2 * f_x + f_xmm) / (ϵ * ϵ)
 
+        # Determine the step-size to use for this row of the Hessian on the
+        # off-diagonal elements.
         ϵ_i = step_size(CentralMode(), x_i)
 
+        # Iterate over the columns of the input for the current row.
         for j = (i + 1):n
+            # Make a copy of the true value of x[i].
             x_j = x[j]
 
+            # Determine the step-size to use for this entry of the Hessian.
             ϵ_j = step_size(CentralMode(), x_j)
 
+            # Temporarily change buffer[i] and buffer[j] to new values and
+            # evaluate f at the new values of x stored in the buffer.
             buffer[i] = x_i + ϵ_i
             buffer[j] = x_j + ϵ_j
             f_xpp = f(buffer)
             buffer[j] = x_j - ϵ_j
             f_xpm = f(buffer)
 
+            # Temporarily change buffer[i] and buffer[j] to new values and
+            # evaluate f at the new values of x stored in the buffer.
             buffer[i] = x_i - ϵ_i
             buffer[j] = x_j + ϵ_j
             f_xmp = f(buffer)
             buffer[j] = x_j - ϵ_j
             f_xmm = f(buffer)
 
-            s4 = convert(S, 4)
-            output[i, j] = (f_xpp - f_xpm - f_xmp + f_xmm) / (s4 * ϵ_i * ϵ_j)
+            # Store the i, j-th component of the Hessian into the output array.
+            t4 = convert(T, 4)
+            output[i, j] = (f_xpp - f_xpm - f_xmp + f_xmm) / (t4 * ϵ_i * ϵ_j)
 
+            # Restore the true value of x[j] in the buffer.
             buffer[j] = x_j
         end
 
+        # Restore the true value of x[i] in the buffer.
         buffer[i] = x_i
     end
 
@@ -106,36 +123,40 @@ function hessian!{S <: AbstractFloat, T <: AbstractFloat}(
 end
 
 """
-    hessian{T <: AbstractFloat}(f::Function, x::Vector{T})
+    hessian{T <: AbstractFloat}(f::Function, x::AbstractArray{T})
 
 # Description
 
-Evaluate the Hessian of `f` at `x` using finite-differencing.
+Evaluate the Hessian of `f` at `x` using finite differences. See
+`hessian!(f, x, buffer)` for more details.
 
 # Arguments
 
 * `f::Function`: The function to be differentiated.
-* `x::Vector{T}`: The value of `x` at which to evaluate the Hessian of `f`.
+* `x::AbstractArray{T <: AbstractArray}`: The value of `x` at which to evaluate
+    the Hessian of `f`.
 
 # Returns
 
-* `output::Matrix{S}`: The Hessian of `f` at `x`.
+* `output::Array{T <: AbstractArray}`: The Hessian of `f` at `x`.
 
 # Examples
 
-```jl
+```julia
 import FiniteDiff: hessian
 x = [0.0, 0.0]
 H = hessian(x -> sin(x[1]) + 2 * sin(x[2]), x)
 ```
 """
-function hessian{T <: AbstractFloat}(f::Function, x::Vector{T})
+function hessian{T <: AbstractFloat}(
+    f::Function,
+    x::AbstractArray{T},
+)::AbstractArray{T}
     # Determine the number of dimensions of the input.
     n = length(x)
 
     # Allocate memory for both the output and the temporary buffer.
-    output = Array(Float64, n, n)
-    buffer = Array(Float64, n)
+    output, buffer = similar(x, n, n), similar(x, n)
 
     # Compute the Hessian using the mutating variant of this function.
     hessian!(output, f, x, buffer)
@@ -168,15 +189,14 @@ using a keyword argument.
 
 # Examples
 
-```jl
+```julia
 import FiniteDiff: hessian
-h = hessian(x -> sin(x[1]) + 2 * sin(x[2]))
+h = hessian(x -> sin(x[1]) + 2 * sin(x[2]), mutates = false)
+x = [0.0, 0.0]
+h(x)
 ```
 """
-function hessian(f::Function; mutates::Bool = false)
-    # TODO: Decide whether to allocate a buffer for users automatically.
-    #    Doing so would require that users provide x up-front so we know its
-    #    size.
+function hessian(f::Function; mutates::Bool = false)::Function
     if mutates
         return (output, x, buffer) -> hessian!(output, f, x, buffer)
     else

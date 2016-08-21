@@ -7,7 +7,7 @@ module TestSecondDerivative
     square(x) = x * x
     two(x) = 2.0
 
-    function check_error(y_true, y_approximate, err = 1 // 100)
+    function check_error(y_true, y_approximate, err = 1 // 10_000)
         # TODO: Decide how to handle very small inputs.
         if y_true > eps(y_true)
             @test abs(y_true - y_approximate) / abs(y_true) < err

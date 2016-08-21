@@ -23,7 +23,7 @@ module TestGradient
         return
     end
 
-    function check_error(y_true, y_approximate, err = 1 // 100)
+    function check_error(y_true, y_approximate, err = 1 // 1_000)
         n = length(y_true)
         @test length(y_approximate) == n
         for i in 1:n
@@ -43,6 +43,7 @@ module TestGradient
         x = Array(Float64, 2)
         output = Array(Float64, 2)
         buffer = Array(Float64, 2)
+        buffer_complex = Array(Complex{Float64}, 2)
         gr = Array(Float64, 2)
 
         n_dims = length(x)
@@ -51,6 +52,7 @@ module TestGradient
             FiniteDiff.ForwardMode(),
             FiniteDiff.BackwardMode(),
             FiniteDiff.CentralMode(),
+            FiniteDiff.ComplexMode(),
         )
 
         for (f, f′!) in funcs
@@ -63,14 +65,22 @@ module TestGradient
                 f′!(gr, x)
 
                 for mode in modes
-                    FiniteDiff.gradient!(output, f, x, buffer, mode)
+                    if mode != FiniteDiff.ComplexMode()
+                        FiniteDiff.gradient!(output, f, x, buffer, mode)
+                    else
+                        FiniteDiff.gradient!(output, f, x, buffer_complex, mode)
+                    end
                     check_error(gr, output)
 
                     output2 = FiniteDiff.gradient(f, x, mode)
                     check_error(gr, output2)
 
                     tmp! = FiniteDiff.gradient(f, mode, mutates = true)
-                    tmp!(output, x, buffer)
+                    if mode != FiniteDiff.ComplexMode()
+                        tmp!(output, x, buffer)
+                    else
+                        tmp!(output, x, buffer_complex)
+                    end
                     check_error(gr, output)
 
                     tmp = FiniteDiff.gradient(f, mode, mutates = false)

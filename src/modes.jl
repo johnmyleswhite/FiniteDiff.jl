@@ -3,7 +3,7 @@
 
 # Description
 
-A type that represents the mode of finite-differencing being used.
+A type that represents the mode of finite differences being used.
 
 * Super type: `Any`
 """
@@ -14,7 +14,7 @@ abstract Mode
 
 # Description
 
-A type that represents the use of forward mode finite-differencing for
+A type that represents the use of forward mode finite differences for
 gradients.
 
 * Super type: `Mode`
@@ -27,7 +27,7 @@ end
 
 # Description
 
-A type that represents the use of backward mode finite-differencing for
+A type that represents the use of backward mode finite differences for
 gradients.
 
 * Super type: `Mode`
@@ -40,7 +40,7 @@ end
 
 # Description
 
-A type that represents the use of central mode finite-differencing for
+A type that represents the use of central mode finite differences for
 gradients.
 
 * Super type: `Mode`
@@ -53,7 +53,7 @@ end
 
 # Description
 
-A type that represents the use of complex mode finite-differencing for
+A type that represents the use of complex mode finite differences for
 gradients.
 
 * Super type: `Mode`
@@ -66,7 +66,7 @@ end
 
 # Description
 
-A type that represents the use of finite-differencing for hessians.
+A type that represents the use of finite differences for hessians.
 
 * Super type: `Mode`
 """

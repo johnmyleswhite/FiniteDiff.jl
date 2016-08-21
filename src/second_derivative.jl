@@ -1,9 +1,9 @@
-"""
+doc"""
     second_derivative(f::Function, x::AbstractFloat)
 
 # Description
 
-Evaluate the second derivative of `f` at `x` using finite-differencing. In
+Evaluate the second derivative of `f` at `x` using finite differences. In
 mathematical notation, we calculate,
 
 ```math
@@ -16,7 +16,8 @@ derivative, but not so small as to suffer from extreme numerical inaccuracy.
 # Arguments
 
 * `f::Function`: The function to be differentiated.
-* `x::AbstractFloat`: An `AbstractFloat` value. Its type must implement `eps`.
+* `x::AbstractFloat`: The point at which to evaluate the derivative of `f`. Its
+    type must implement `eps`.
 
 # Returns
 
@@ -29,21 +30,21 @@ import FiniteDiff: second_derivative
 y = second_derivative(sin, 1.0)
 ```
 """
-@inline function second_derivative(f::Function, x::AbstractFloat)
+@inline function second_derivative(f::Function, x::AbstractFloat)::Real
     ϵ = step_size(HessianMode(), x)
     return (f(x + ϵ) - 2 * f(x) + f(x - ϵ)) / (ϵ * ϵ)
 end
 
-"""
-    second_derivative!{T <: AbstractFloat}(
-        output::Vector{T},
+doc"""
+    second_derivative!(
+        output::AbstractArray,
         f::Function,
         x::AbstractFloat,
     )
 
 # Description
 
-Evaluate the second derivative of `f` at `x` using finite-differencing. In
+Evaluate the second derivative of `f` at `x` using finite differences. In
 mathematical notation, we calculate,
 
 ```math
@@ -54,14 +55,14 @@ where ``\epsilon`` is chosen to be small enough to approximate the second
 derivative, but not so small as to suffer from extreme numerical inaccuracy.
 
 The first argument, `output`, will be mutated so that the value of the second
-derivative in its first element.
+derivative is its first element.
 
 # Arguments
 
-* `output::AbstractArray{T <: AbstractFloat}`: An vector whose first element
-    will be mutated.
+* `output::AbstractArray`: An array whose first element will be mutated.
 * `f::Function`: The function to be differentiated.
-* `x::AbstractFloat`: An `AbstractFloat` value. Its type must implement `eps`.
+* `x::AbstractFloat`: The point at which to evaluate the derivative of `f`. Its
+    type must implement `eps`.
 
 # Returns
 
@@ -75,11 +76,11 @@ y = Array(Float64, 1)
 second_derivative!(y, sin, 1.0)
 ```
 """
-function second_derivative!{T <: AbstractFloat}(
-    output::AbstractArray{T},
+function second_derivative!(
+    output::AbstractArray,
     f::Function,
     x::AbstractFloat,
-)
+)::Void
     output[1] = second_derivative(f, x)
     return
 end
@@ -90,8 +91,8 @@ end
 # Description
 
 Construct a new function that will evaluate the second derivative of `f` at
-any point `x`. A keyword argument specifies whether the function should be
-mutating or non-mutating.
+any point `x`. A keyword argument specifies whether the resulting function
+should be mutating or non-mutating.
 
 # Arguments
 
@@ -114,7 +115,7 @@ f′′ = second_derivative(sin)
 f′′(1.0)
 ```
 """
-function second_derivative(f::Function; mutates::Bool=false)
+function second_derivative(f::Function; mutates::Bool=false)::Function
     if mutates
         return (output, x) -> second_derivative!(output, f, x)
     else

@@ -41,7 +41,7 @@ module TestHessian
         return
     end
 
-    function check_error(y_true, y_approximate, err = 1 // 100)
+    function check_error(y_true, y_approximate, err = 1 // 10_000)
         n = length(y_true)
         @test length(y_approximate) == n
         for i in 1:n
